@@ -7,8 +7,8 @@
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
 // @include      *build.code.ipreo.com/viewLog.html?buildId=*
 // @grant        none
-// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/blob/master/teamCity_FailedTestsFiltering.js
-// @updateURL  https://github.com/tetrissstar/teamCityExtensions/blob/master/teamCity_FailedTestsFiltering.js
+// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/raw/master/teamCity_FailedTestsFiltering.js
+// @updateURL  https://github.com/tetrissstar/teamCityExtensions/raw/master/teamCity_FailedTestsFiltering.js
 // ==/UserScript==
 
 (function () {
