@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         TeamCity Extensions - main loop
 // @namespace    http://ipreo.com/
-// @version      0.1.2
+// @version      1.0.1
 // @description  Base extension for TeamCity, containing main update loop
-// @author       Oleksandr Liakhevych
+// @author       Equity team
 // @include      *tc41ny1us02*
 // @include      *build.code.ipreo.com/viewLog.html?buildId=*
 // @grant        none
