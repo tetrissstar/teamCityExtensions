@@ -3,12 +3,12 @@
 // @namespace    http://ipreo.com/
 // @version      0.2
 // @description  Extension for Team City, adding ability to filter failed tests by error message
-// @author       Oleksandr Liakhevych
+// @author       Equity Team
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
 // @include      *build.code.ipreo.com/viewLog.html?buildId=*
 // @grant        none
-// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/master/teamCity_FailedTestsFiltering.js
-// @updateURL  https://github.com/tetrissstar/teamCityExtensions/master/teamCity_FailedTestsFiltering.js
+// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/teamCity_FailedTestsFiltering.js
+// @updateURL  https://github.com/tetrissstar/teamCityExtensions/teamCity_FailedTestsFiltering.js
 // ==/UserScript==
 
 (function () {
