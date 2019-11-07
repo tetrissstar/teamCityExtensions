@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Get Good view for Daily Report
 // @namespace    http://ipreo.com/
-// @version      1.0.1
+// @version      1.0.2
 // @description  Extension for TeamCity, Add button to Action (Good view for Daily Report)
 // @author       Anton Ternov
 // @match        http://tc41ny1us02*/*buildId*
@@ -48,14 +48,14 @@
     function getSpaceTestCount(space){
             var str = space.replace(/\n/g, " ");
             str = str.indexOf(":") >= 0 ? str.split(':').slice(-1)[0] : str;
-            var result = str.match( /([0-9A-Za-z_\.-]+) \((\d+)\)/i );
+            var result = str.match( /([0-9A-Za-z_\.-]+)\s*\((\d+)\)/i );
             var testCount = parseInt(result[2]);
             return testCount;
     }
-    function getSpaceName (space){
+    function getSpaceName(space){
             var str = space.replace(/\n/g, " ");
             str = str.indexOf(":") >= 0 ? str.split(':').slice(-1)[0] : str;
-            var result = str.match( /([0-9A-Za-z_\.-]+) \((\d+)\)/i );
+            var result = str.match( /([0-9A-Za-z_\.-]+)\s*\((\d+)\)/i );
             var areaName = result[1];
             return areaName;
      }
@@ -70,7 +70,7 @@
         /*all areas*/
         var nodesArray = Array.prototype.slice.call(document.querySelectorAll("div[class*='group-div'] > div[class*='group-name']"));
         var __spaces = nodesArray.map(function(e){return e.innerText;});
-        var __spacesDimension =  getSpacesNums(__spaces);
+        var __spacesDimension = getSpacesNums(__spaces);
 
         /*all failed tests*/
         var unhiddenTests = getFailedTests("filtered");
