@@ -7,8 +7,8 @@
 // @include      *tc41ny1us02*
 // @include      *build.code.ipreo.com/viewLog.html?buildId=*
 // @grant        none
-// @downloadURL https://github.com/tetrissstar/teamCityExtensions/edit/master/teamCity_UpdateLoop.js
-// @updateURL https://github.com/tetrissstar/teamCityExtensions/edit/master/teamCity_UpdateLoop.js
+// @downloadURL https://github.com/tetrissstar/teamCityExtensions/raw/master/teamCity_UpdateLoop.js
+// @updateURL https://github.com/tetrissstar/teamCityExtensions/raw/master/teamCity_UpdateLoop.js
 // ==/UserScript==
 
 (function() {
