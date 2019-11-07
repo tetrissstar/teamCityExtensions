@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Get Good view for Daily Report
 // @namespace    http://ipreo.com/
-// @version      0.1.6
+// @version      1.0.1
 // @description  Extension for TeamCity, Add button to Action (Good view for Daily Report)
 // @author       Anton Ternov
 // @match        http://tc41ny1us02*/*buildId*
 // @include      *build.code.ipreo.com/viewLog.html?buildId=*
 // @grant        none
-// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/master/teamCity_GoodViewForDailyReport.js
-// @updateURL  https://github.com/tetrissstar/teamCityExtensions/master/teamCity_GoodViewForDailyReport.js
+// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/teamCity_GoodViewForDailyReport.js
+// @updateURL  https://github.com/tetrissstar/teamCityExtensions/teamCity_GoodViewForDailyReport.js
 // ==/UserScript==
 
 (function () {
