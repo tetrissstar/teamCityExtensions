@@ -7,8 +7,8 @@
 // @match        http://tc41ny1us02*/*buildId*
 // @include      *build.code.ipreo.com/viewLog.html?buildId=*
 // @grant        none
-// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/blob/master/teamCity_GoodViewForDailyReport.js
-// @updateURL  https://github.com/tetrissstar/teamCityExtensions/blob/master/teamCity_GoodViewForDailyReport.js
+// @downloadURL  https://github.com/tetrissstar/teamCityExtensions/raw/master/teamCity_GoodViewForDailyReport.js
+// @updateURL  https://github.com/tetrissstar/teamCityExtensions/raw/master/teamCity_GoodViewForDailyReport.js
 // ==/UserScript==
 
 (function () {
