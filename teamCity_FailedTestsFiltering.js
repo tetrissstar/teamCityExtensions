@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Failed tests filtering
 // @namespace    http://ipreo.com/
-// @version      0.2.1
+// @version      0.2.2
 // @description  Extension for Team City, adding ability to filter failed tests by error message
 // @author       Equity Team
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
@@ -93,14 +93,18 @@
 	}
 
     function showTCFilterForUnhiddenTests () {
-        var myWindow = window.open("", "", "width=600,height=280");
-		myWindow.document.write('<p><textarea cols="80" rows="15">' + getFailedTestsFilter("filtered") + '</textarea></p>');
-        myWindow.document.close();
+        showTCFilterWindow("Filter For Unhidden Tests", getFailedTestsFilter("filtered"));
     }
 
     function showTCFilterForManuallyCheckedTests () {
-        var myWindow = window.open("", "", "width=600,height=280");
-		myWindow.document.write('<p><textarea cols="80" rows="15">' + getFailedTestsFilter("checked") + '</textarea></p>');
+        showTCFilterWindow("Filter For Manually Checked Tests",getFailedTestsFilter("checked"));
+    }
+
+    function showTCFilterWindow(windowTitle, failedTestsFilter)
+    {
+        var myWindow = window.open("", "", "directories=no,toolbar=no,location=no,status=no,menubar=no,width=600,height=280");
+	myWindow.document.write('<textarea cols="80" rows="15" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;width: 100%;;height: 100%">' + failedTestsFilter + '</textarea>');
+        myWindow.onload = function() { this.document.title = windowTitle; }
         myWindow.document.close();
     }
 
