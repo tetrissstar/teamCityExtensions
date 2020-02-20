@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Failed tests filtering
 // @namespace    http://ipreo.com/
-// @version      0.2.2
+// @version      0.2.5
 // @description  Extension for Team City, adding ability to filter failed tests by error message
 // @author       Equity Team
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
@@ -26,9 +26,18 @@
 
     var querySelectorForFailedTests = {
         "all": ".testList a.testWithDetails",
-        "checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
-        "filtered": '.testList tr:not([style*="display: none"]) a.testWithDetails'
+        "manually_checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
+        "failed_only_section": '#tst_group_build_fail .testList a.testWithDetails',
+        "ignored_only_section": '#tst_group_build_ignore .testList a.testWithDetails',
+        "filtered": '.testList tr:not([style*="display: none"]) a.testWithDetails',
+        "filtered_failed_only_section": '#tst_group_build_fail .testList tr:not([style*="display: none"]) a.testWithDetails'
     };
+
+    function getFilterOptions() {
+        return Object.keys(querySelectorForFailedTests).map(function (key) {
+			return '<option value="'+key+'">'+key+'</option>';
+		}).join("");
+    }
 
 	function getFailedTests(option) {
 		var testNames = [];
@@ -51,6 +60,10 @@
 		return getFailedTests(option).map(function (testName) {
 			return "FullyQualifiedName~" + testName;
 		}).join("|");
+	}
+
+    function getFailedTestsNumber(option) {
+		return getFailedTests(option).length;
 	}
 
 	function getCurrentBuildEnvironment() {
@@ -76,7 +89,7 @@
         }
         //alert(getFailedTestsFilter(option));
 
-		var body = '<build>' + '<buildType id="' + getOnDemandBuildId() + '" />' + '<properties>' + '<property name="filter.base" value="' + getFailedTestsFilter(option) + '" />' + '</properties>' + '</build>';
+		var body = '<build><buildType id="' + getOnDemandBuildId() + '" />' + '<properties>' + '<property name="filter.base" value="' + getFailedTestsFilter(option) + '" /></properties></build>';
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", "/httpAuth/app/rest/buildQueue", true);
 		xhr.setRequestHeader('Content-Type', 'application/xml');
@@ -103,7 +116,7 @@
     function showTCFilterWindow(windowTitle, failedTestsFilter)
     {
         var myWindow = window.open("", "", "directories=no,toolbar=no,location=no,status=no,menubar=no,width=600,height=280");
-	myWindow.document.write('<textarea cols="80" rows="15" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;width: 100%;;height: 100%">' + failedTestsFilter + '</textarea>');
+	myWindow.document.write('<div style="width: 100%;height: 100%"><textarea cols="80" rows="15" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;width:100%;height:100%">' + failedTestsFilter + '</textarea></div>');
         myWindow.onload = function() { this.document.title = windowTitle; }
         myWindow.document.close();
     }
@@ -252,16 +265,33 @@
 	<input class="btn" id="filter-tests-reset" type="button" value="Reset">
     <span style="float:right;padding-left:10px;" id="getfiltertc">
          <span>Filter for TC: </span>
+           <select id="get-filter-tests-options">
+	       </select>
+         <input class="btn" id="show-tc-filter-for-tests" type="button" value="Show">
+<!--
          <input class="btn" id="show-filter-for-rerun-unfiltered-tests" type="button" value="Unhidden">
          <input class="btn" id="show-filter-for-rerun-manuallychecked-tests" type="button" value="Man. Checked">
+-->
     </span>
 </span>
+<!--
 <span style="float:right;padding-right:50px;" id="rerunsection">
     Rerun:
     <input class="btn" id="rerun-all-failed" type="button" value="All">
 	<input class="btn" id="rerun-checked" type="button" value="Manually Checked">
     <input class="btn" id="rerun-filtered" type="button" value="Unhidden">
-</span>`;
+</span>
+-->`;
+
+            var getFilterTestsOptions = document.getElementById('get-filter-tests-options');
+            getFilterTestsOptions.innerHTML = getFilterOptions();
+            var showTCFilterButton = document.getElementById('show-tc-filter-for-tests');
+
+            showTCFilterButton.onclick = function () {
+                var tcFilterBy = getFilterTestsOptions.options[getFilterTestsOptions.selectedIndex].value;
+                showTCFilterWindow(tcFilterBy+' ['+getFailedTestsNumber(tcFilterBy)+']',getFailedTestsFilter(tcFilterBy));
+            };
+/*
             var rerunAllButton = document.getElementById('rerun-all-failed');
             var rerunCheckedButton = document.getElementById('rerun-checked');
             var rerunFiltered = document.getElementById('rerun-filtered');
@@ -269,18 +299,18 @@
             rerunAllButton.onclick = triggerRerunBuildAll;
             rerunCheckedButton.onclick = triggerRerunBuildChecked;
             rerunFiltered.onclick = triggerRerunBuildFiltered;
-
+*/
             var filterButton = document.getElementById('filter-tests-filter');
             var resetFilterButton = document.getElementById('filter-tests-reset');
             var positiveSearchSelect = document.getElementById('filter-tests-positive');
             var searchByTextField = document.getElementById('filter-tests-by');
-
+/*
             var getFilterTCButton = document.getElementById('show-filter-for-rerun-unfiltered-tests');
             var getFilterManuallyCheckedTCButton = document.getElementById('show-filter-for-rerun-manuallychecked-tests');
 
             getFilterTCButton.onclick = showTCFilterForUnhiddenTests;
             getFilterManuallyCheckedTCButton.onclick = showTCFilterForManuallyCheckedTests;
-
+*/
             filterButton.onclick = function () {
                 showLoadingIcon(true);
                 var filterBy = searchByTextField.value;
