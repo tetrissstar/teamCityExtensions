@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Failed tests filtering
 // @namespace    http://ipreo.com/
-// @version      0.2.6
+// @version      0.2.7
 // @description  Extension for Team City, adding ability to filter failed tests by error message
 // @author       Equity Team
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
@@ -142,7 +142,12 @@
 
     function showTCFilterWindow(windowTitle, failedTestsFilter)
     {
-        var myWindow = window.open("", "", "directories=no,toolbar=no,location=no,status=no,menubar=no,width=600,height=280");
+        var myWidth= 600;
+        var myHeight= 280;
+        var left = (screen.width - myWidth) / 2;
+        var top = (screen.height - myHeight) / 4;
+
+        var myWindow = window.open("", "", 'directories=no,toolbar=no,location=no,status=no,menubar=no,width='+myWidth+',height='+myHeight+',top='+top+',left='+left);
 	myWindow.document.write('<div style="width: 100%;height: 100%"><textarea cols="80" rows="15" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;width:100%;height:100%">' + failedTestsFilter + '</textarea></div>');
         myWindow.onload = function() { this.document.title = windowTitle; }
         myWindow.document.close();
