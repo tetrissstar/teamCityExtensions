@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Failed tests filtering
 // @namespace    http://ipreo.com/
-// @version      0.2.5
+// @version      0.2.6
 // @description  Extension for Team City, adding ability to filter failed tests by error message
 // @author       Equity Team
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
@@ -26,11 +26,13 @@
 
     var querySelectorForFailedTests = {
         "all": ".testList a.testWithDetails",
-        "manually_checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
+        //"manually_checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
+        "manually_checked": '#tst_group_build_fail .testList tr:not([style*="display: none"]) .testNameWrapper',
+        "filtered": '.testList tr:not([style*="display: none"]) a.testWithDetails',
+        "filtered_failed_only_section": '#tst_group_build_fail .testList tr:not([style*="display: none"]) a.testWithDetails',
         "failed_only_section": '#tst_group_build_fail .testList a.testWithDetails',
         "ignored_only_section": '#tst_group_build_ignore .testList a.testWithDetails',
-        "filtered": '.testList tr:not([style*="display: none"]) a.testWithDetails',
-        "filtered_failed_only_section": '#tst_group_build_fail .testList tr:not([style*="display: none"]) a.testWithDetails'
+        "muted_only_section": '#tst_group_build_mute .testList a.testWithDetails',
     };
 
     function getFilterOptions() {
@@ -43,7 +45,20 @@
 		var testNames = [];
 		var testElements = document.querySelectorAll(querySelectorForFailedTests[option]);
 		for (var i = 0; i < testElements.length; i++) {
-			var tooltipElement = testElements[i].querySelector("span[onmouseover]");
+            var tooltipElement = null;
+            if(option==="manually_checked"){
+                var testElementCheckBox = testElements[i].querySelector("span.checkbox.custom-checkbox_checked");
+                if(testElementCheckBox === null)
+                    continue;
+                var testElement = testElements[i].querySelector("a.testWithDetails");
+                if(testElement === null)
+                    continue;
+
+                tooltipElement = testElement.querySelector("span[onmouseover]");
+            } else {
+                 tooltipElement = testElements[i].querySelector("span[onmouseover]");
+            }
+
 			var testName;
 			if (tooltipElement) {
 				var tooltipMouseover = tooltipElement.getAttribute('onmouseover');
@@ -51,19 +66,31 @@
 			} else {
 				testName = testElements[i].innerText.trim();
 			}
-			testNames[i] = testName;
+
+            if (testName !== "" && testName !== null)
+                testNames[i] = testName;
 		}
 		return testNames;
 	}
 
 	function getFailedTestsFilter(option) {
-		return getFailedTests(option).map(function (testName) {
+		return getFailedTests(option).filter(function(el) {
+            if (el === null || el === "") {
+                return false; // skip
+            }
+            return true;
+        }).map(function (testName) {
 			return "FullyQualifiedName~" + testName;
 		}).join("|");
 	}
 
     function getFailedTestsNumber(option) {
-		return getFailedTests(option).length;
+		return getFailedTests(option).filter(function(el) {
+            if (el === null || el === "") {
+                return false; // skip
+            }
+            return true;
+        }).length;
 	}
 
 	function getCurrentBuildEnvironment() {
