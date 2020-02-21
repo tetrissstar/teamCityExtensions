@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Get Good view for Daily Report
 // @namespace    http://ipreo.com/
-// @version      1.0.2
+// @version      1.0.3
 // @description  Extension for TeamCity, Add button to Action (Good view for Daily Report)
 // @author       Anton Ternov
 // @match        http://tc41ny1us02*/*buildId*
@@ -16,8 +16,11 @@
 
     var querySelectorForFailedTests = {
         "all": ".testList a.testWithDetails",
-        "checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
-        "filtered": '.testList tr:not([style*="display: none"]) a.testWithDetails'
+        "manually_checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
+        "failed_only_section": '#tst_group_build_fail .testList a.testWithDetails',
+        "ignored_only_section": '#tst_group_build_ignore .testList a.testWithDetails',
+        "filtered": '.testList tr:not([style*="display: none"]) a.testWithDetails',
+        "filtered_failed_only_section": '#tst_group_build_fail .testList tr:not([style*="display: none"]) a.testWithDetails'
     };
 
 	function getFailedTests(option) {
@@ -59,7 +62,7 @@
             var areaName = result[1];
             return areaName;
      }
-    function OpenGoodView(){
+    function OpenGoodView(viewOption){
         var title = document.evaluate("//div[@class='select-all']/label", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         var failed = document.evaluate("//p[@id='idfailed']/span[@class='failCount']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         var passed = document.evaluate("//p[@class='passedTestsBlock']/span[@class='passCount']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
@@ -73,7 +76,7 @@
         var __spacesDimension = getSpacesNums(__spaces);
 
         /*all failed tests*/
-        var unhiddenTests = getFailedTests("filtered");
+        var unhiddenTests = getFailedTests(viewOption);
         var __allFailedTests = getFailedTests("all");
 
         /*functions*/
@@ -129,7 +132,7 @@
 
         var getFailedTestsTable = function(tests){
             //var table = '<table  id="tableId" border="1" bordercolor="#AAAAAA"><tr><th>Test Area</th><th>Test Case</th><th></th></tr>\n ';
-            var table = '<table  id="tableId" border="1" bordercolor="#AAAAAA">\n ';
+            var table = '<table  id="tableId" border="0" bordercolor="#AAAAAA">\n ';
             var mystring = "";
             var testCounter = 0;
             var lastSpaceName = "";
@@ -250,10 +253,21 @@
             var button = document.createElement("input");
             button.setAttribute("type", "button");
             button.setAttribute("value", "Good View for Daily Report");
-            button.onclick = OpenGoodView;
+            button.onclick = function () { OpenGoodView('filtered'); }
 
             linkLi.appendChild(button);
             action.appendChild(linkLi);
+
+            var linkLi2 = document.createElement("li");
+            linkLi2.setAttribute("class", "menuItem");
+            linkLi2.setAttribute("title","");
+            var button2 = document.createElement("input");
+            button2.setAttribute("type", "button");
+            button2.setAttribute("value", "Good View for Daily Report only Failed");
+            button2.onclick = function () { OpenGoodView('filtered_failed_only_section'); }
+
+            linkLi2.appendChild(button2);
+            action.appendChild(linkLi2);
         }
     }
 
