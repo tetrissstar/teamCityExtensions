@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Failed tests filtering
 // @namespace    http://ipreo.com/
-// @version      0.2.7
+// @version      0.2.8
 // @description  Extension for Team City, adding ability to filter failed tests by error message
 // @author       Equity Team
 // @include      *tc41ny1us02*/viewLog.html?buildId=*
