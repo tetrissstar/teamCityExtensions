@@ -41,36 +41,33 @@
 		}).join("");
     }
 
-	function getFailedTests(option) {
-		var testNames = [];
-		var testElements = document.querySelectorAll(querySelectorForFailedTests[option]);
-		for (var i = 0; i < testElements.length; i++) {
+function getFailedTests(option) {
+	var testNames = [];
+	var testElements = document.querySelectorAll(querySelectorForFailedTests[option]);
+	for (var i = 0; i < testElements.length; i++) {
             var tooltipElement = null;
+            var testElement = testElements[i];
             if(option==="manually_checked"){
                 var testElementCheckBox = testElements[i].querySelector("span.checkbox.custom-checkbox_checked");
                 if(testElementCheckBox === null)
                     continue;
-                var testElement = testElements[i].querySelector("a.testWithDetails");
+                testElement = testElements[i].querySelector("a.testWithDetails");
                 if(testElement === null)
                     continue;
-
-                tooltipElement = testElement.querySelector("span[onmouseover]");
-            } else {
-                 tooltipElement = testElements[i].querySelector("span[onmouseover]");
             }
-
-			var testName;
-			if (tooltipElement) {
-				var tooltipMouseover = tooltipElement.getAttribute('onmouseover');
-				testName = tooltipMouseover.substring(tooltipMouseover.indexOf("'") + 1, tooltipMouseover.lastIndexOf("'") - 1).trim();
-			} else {
-				testName = testElements[i].innerText.trim();
-			}
+            tooltipElement = testElement.querySelector("span[onmouseover]");
+            var testName;
+            if (tooltipElement) {
+		var tooltipMouseover = tooltipElement.getAttribute('onmouseover');
+		testName = tooltipMouseover.substring(tooltipMouseover.indexOf("'") + 1, tooltipMouseover.lastIndexOf("'") - 1).trim();
+            } else {
+		testName = testElement.innerText.trim();
+            }
 
             if (testName !== "" && testName !== null)
                 testNames[i] = testName;
-		}
-		return testNames;
+            }
+            return testNames;
 	}
 
 	function getFailedTestsFilter(option) {
