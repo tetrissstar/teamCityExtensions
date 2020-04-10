@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TeamCity Extensions - Get Good view for Daily Report
 // @namespace    http://ipreo.com/
-// @version      1.0.3
+// @version      1.0.4
 // @description  Extension for TeamCity, Add button to Action (Good view for Daily Report)
 // @author       Anton Ternov
 // @match        http://tc41ny1us02*/*buildId*
@@ -15,7 +15,7 @@
     'use strict';
 
     var querySelectorForFailedTests = {
-        "all": ".testList a.testWithDetails",
+        "all": "#tst_group_build_fail .testList a.testWithDetails, #tst_group_build_muted .testList a.testWithDetails",
         "manually_checked": '.testList tr.testRowSelected:not([style*="display: none"]) a.testWithDetails',
         "failed_only_section": '#tst_group_build_fail .testList a.testWithDetails',
         "ignored_only_section": '#tst_group_build_ignore .testList a.testWithDetails',
@@ -71,7 +71,7 @@
         var failedValue = failed === null? "0":failed.innerText;
 
         /*all areas*/
-        var nodesArray = Array.prototype.slice.call(document.querySelectorAll("div[class*='group-div'] > div[class*='group-name']"));
+        var nodesArray = Array.prototype.slice.call(document.querySelectorAll("#tst_group_build_fail div[class*='group-div'] > div[class*='group-name'], #tst_group_build_muted div[class*='group-div'] > div[class*='group-name']"));
         var __spaces = nodesArray.map(function(e){return e.innerText;});
         var __spacesDimension = getSpacesNums(__spaces);
 
@@ -154,6 +154,7 @@
 
         var goodView = function(title, failed, passed, tests) {
             var failedTestsTable = getFailedTestsTable(tests);
+
             var info = getInfo(failed, passed);
             var numberOfTests = tests.length;
 
